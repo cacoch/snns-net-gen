@@ -2,7 +2,6 @@
 
 # Generate SNNS net file
 # input No 
-# number of hidden layers
 # number of nodes in each hidden layer
 # number output 
 
@@ -35,8 +34,10 @@ update function   : Serial_Order
 
     return h
 
-def unit_definiton( no, st, position, typeName=None, unitName=None,act=0.00000, 
+def unit_definiton( no, st, position, 
                  bias=0.00000,act_func=None, out_func=None, sites=None):
+
+    act=0
 
     result = ""
     result += '{:>3} |'.format(no) # no
@@ -49,6 +50,14 @@ def unit_definiton( no, st, position, typeName=None, unitName=None,act=0.00000,
     result += '||' # 0ut_func + sites
     return result
         
+def unit_definition_table_rows(input_no, hidden_no, output_no):
+    
+    result =""
+    st_array = ['i'] * input_no + ["h"] * hidden_no + ["o"] * output_no
+    for i in range(1, input_no + hidden_no + output_no +1):
+        result += unit_definiton(i, st_array.pop(0),"2, 2, 0") + "\n"
+
+    return result
 
     
 
@@ -60,4 +69,6 @@ print(test)
 print(new_unit)
 print(new_unit1)
 print(snns_header())
+print(unit_definition_table_rows(2,3,5))
+
 
