@@ -59,7 +59,39 @@ def unit_definition_table_rows(input_no, hidden_no, output_no):
 
     return result
 
-    
+def split_by_layers(input_no, hidden_layers, output_no):     
+    """Set units per layer
+
+    Parameters
+    ----------
+    input_no : Integer
+        number of input units
+    hidden_layers: list of Integers
+        number of units per hidden layer
+    output_no : Integer
+        number of output units
+
+    Returns
+    -------
+    list of list
+        A list of each node per layer
+    """
+    result = []
+
+    data = [input_no] + hidden_layers + [output_no]
+    start = 1
+    stop = input_no
+
+
+    for el in data:
+        layer = [n for n in range(start, stop+1)]
+        start += el
+        stop += el
+        result.append(layer)
+
+
+
+    return result
 
 
 new_unit = unit_definiton(1,"i","2, 2, 0") 
@@ -68,7 +100,8 @@ new_unit1 = unit_definiton(10,"i","2, 2, 0")
 print(test)
 print(new_unit)
 print(new_unit1)
-print(snns_header())
-print(unit_definition_table_rows(2,3,5))
+#print(snns_header())
+#print(unit_definition_table_rows(2,3,5))
+
 
 
