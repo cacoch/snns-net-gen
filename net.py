@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-
 # Generate SNNS net file
 # input No 
 # number of nodes in each hidden layer
 # number output 
 
+from itertools import pairwise
+import argparse
 
 """
 no. | typeName | unitName | act      | bias     | st | position | act func | out func | sites
@@ -81,9 +82,12 @@ def split_by_layers(input_no, hidden_layers, output_no):
     data = [input_no] + hidden_layers + [output_no]
     start = 1
     stop = input_no
+    print(f"DATA {data}")
+    
 
 
     for el in data:
+        print(f"range({start}, {stop}+1)")
         layer = [n for n in range(start, stop+1)]
         start += el
         stop += el
@@ -93,10 +97,47 @@ def split_by_layers(input_no, hidden_layers, output_no):
 
     return result
 
+def list_of_connection(data):
+    """list of all connections
 
+    Parameters
+    ----------
+    input_no : Integer
+        number of input units
+
+    Returns
+    -------
+    list of dictionries
+        A list all connections 
+    """
+
+    result = []
+
+    data = list(pairwise(data))
+    for el in data:
+        (source, target) = el
+        for el1 in target:
+            result.append((el1,source))
+
+    return dict(result)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Create SNNS net file.')
+    parser.add_argument('--input', '-i', required=True,type=int,  help='Number of input nodes')
+    parser.add_argument('--hidden', '-H', required=True, type=str,  help='Number of hidden nodes per layer')
+    parser.add_argument('--output', '-o',  required=True,type=int, help='Number of output nodes')
+    #parser.add_argument('integers', metavar='N', type=int, nargs='+', help='an integer for the accumulator')
+    args = parser.parse_args()
+    print(args)
+
+
+
+#( '{}:0.000, '*len(a) ).format(*a)
 new_unit = unit_definiton(1,"i","2, 2, 0") 
 new_unit1 = unit_definiton(10,"i","2, 2, 0") 
 
+x = list_of_connection([[1,2],[3,4],[5,6]])
+print(x)
 print(test)
 print(new_unit)
 print(new_unit1)
