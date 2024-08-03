@@ -82,9 +82,8 @@ def split_by_layers(input_no, hidden_layers, output_no):
     data = [input_no] + hidden_layers + [output_no]
     start = 1
     stop = input_no
-    print(f"DATA {data}")
+    #print(f"DATA {data}")
     
-
 
     for el in data:
         print(f"range({start}, {stop}+1)")
@@ -120,6 +119,50 @@ def list_of_connection(data):
             result.append((el1,source))
 
     return dict(result)
+
+def print_connection(data):
+    """print one connection in SNNS format
+
+    Parameters
+    ----------
+    input : dict {N:[x1,x2,...x_m]}
+        connection for one unit
+
+    Returns
+    -------
+    strin 
+        SNNS format for one connection
+    """
+
+    (k, v), = data.items()
+    result = '\n' + f"{k:>6} |      |"
+
+    x = v[0]
+
+    layer = [f"{n:>4}: 0.00000" for n in v]
+    #print(layer)
+    s = ",".join(layer)
+    length = 112
+    s1 = [s[0+i:length+i] for i in range(0, len(s), length)]
+    #print(s1[0])
+
+    result += ( s1[0] + "\n               " +  s1[1]
+    + "\n               " +  s1[2]
+    + "\n               " +  s1[3]
+    + "\n               " +  s1[4]
+    + "\n               " +  s1[5]
+    + "\n               " +  s1[6]
+    + "\n               " +  s1[7]
+    + "\n               " +  s1[8]
+    + "\n               " +  s1[9]
+    + "\n               " +  s1[10]
+               )
+
+
+    #print(result)
+
+    return result
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create SNNS net file.')
