@@ -150,6 +150,24 @@ def print_connection(data):
 
     return result
 
+def print_all_connection(data):
+    result =""
+
+    while data:
+        el = data.popitem()
+        result += print_connection(dict([el])) + "\n"
+
+    return result
+
+conn_separtor = """
+-------|------|----------------------------------------------------------------------------------------------------------------
+"""
+
+conn_header = """
+connection definition section :
+
+target | site | source:weight
+"""
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create SNNS net file.')
@@ -171,7 +189,9 @@ print(x)
 print(test)
 print(new_unit)
 print(new_unit1)
-#print(snns_header())
+
+print(print_all_connection({3: [1, 2], 4: [1, 2], 5: [3, 4], 6: [3, 4]}))
+
 #print(unit_definition_table_rows(2,3,5))
 
 
