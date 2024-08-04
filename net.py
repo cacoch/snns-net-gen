@@ -130,12 +130,12 @@ def print_connection(data):
 
     Returns
     -------
-    strin 
+    string
         SNNS format for one connection
     """
 
     (k, v), = data.items()
-    result = '\n' + f"{k:>6} |      |"
+    result =  f"{k:>6} |      |"
 
     x = v[0]
 
@@ -146,20 +146,7 @@ def print_connection(data):
     s1 = [s[0+i:length+i] for i in range(0, len(s), length)]
     #print(s1[0])
 
-    result += ( s1[0] + "\n               " +  s1[1]
-    + "\n               " +  s1[2]
-    + "\n               " +  s1[3]
-    + "\n               " +  s1[4]
-    + "\n               " +  s1[5]
-    + "\n               " +  s1[6]
-    + "\n               " +  s1[7]
-    + "\n               " +  s1[8]
-    + "\n               " +  s1[9]
-    + "\n               " +  s1[10]
-               )
-
-
-    #print(result)
+    result +=  "\n               ".join(s1)
 
     return result
 

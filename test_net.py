@@ -4,8 +4,8 @@ from testfixtures import compare
 from net import unit_definiton, split_by_layers, print_connection
 
 test_u = "  1 |          |          |  0.00000 |  0.00000 | i  |  2, 2, 0 |||"
-test_conn ="""
-    82 |      |   1: 0.00000,   2: 0.00000,   3: 0.00000,   4: 0.00000,   5: 0.00000,   6: 0.00000,   7: 0.00000,   8: 0.00000,
+
+test_conn ="""    82 |      |   1: 0.00000,   2: 0.00000,   3: 0.00000,   4: 0.00000,   5: 0.00000,   6: 0.00000,   7: 0.00000,   8: 0.00000,
                   9: 0.00000,  10: 0.00000,  11: 0.00000,  12: 0.00000,  13: 0.00000,  14: 0.00000,  15: 0.00000,  16: 0.00000,
                  17: 0.00000,  18: 0.00000,  19: 0.00000,  20: 0.00000,  21: 0.00000,  22: 0.00000,  23: 0.00000,  24: 0.00000,
                  25: 0.00000,  26: 0.00000,  27: 0.00000,  28: 0.00000,  29: 0.00000,  30: 0.00000,  31: 0.00000,  32: 0.00000,
@@ -22,9 +22,9 @@ def test_constructor():
     assert new_unit == test_u
 
 def test_split():
-    #assert split_by_layers(1,[1],1) == [[1],[2],[3]]
-    #assert split_by_layers(1,[1,1],1) == [[1],[2],[3],[4]]
-    #assert split_by_layers(1,[2],1) == [[1],[2,3],[4]]
+    assert split_by_layers(1,[1],1) == [[1],[2],[3]]
+    assert split_by_layers(1,[1,1],1) == [[1],[2],[3],[4]]
+    #assert split_by_layers(1,[2],1) == [[1],[2,3],[4]] this one fail
     assert split_by_layers(2,[2],2) == [[1,2],[3,4],[5,6]]
     
 def test_print_connection():
