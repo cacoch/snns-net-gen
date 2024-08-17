@@ -168,15 +168,44 @@ connection definition section :
 
 target | site | source:weight
 """
+default_unit_section = """
+unit default section :
+
+act      | bias     | st | subnet | layer | act func     | out func
+---------|----------|----|--------|-------|--------------|-------------
+ 0.00000 |  0.00000 | h  |      0 |     1 | Act_Logistic | Out_Identity 
+---------|----------|----|--------|-------|--------------|-------------
+"""
+unit_definition_header = """
+unit definition section :
+
+no. | typeName | unitName | act      | bias     | st | position | act func | out func | sites
+----|----------|----------|----------|----------|----|----------|----------|----------|-------
+"""
+def hidden_layer(string):
+    print(type(string))
+
+    return int(string) 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create SNNS net file.')
-    parser.add_argument('--input', '-i', required=True,type=int,  help='Number of input nodes')
-    parser.add_argument('--hidden', '-H', required=True, type=str,  help='Number of hidden nodes per layer')
-    parser.add_argument('--output', '-o',  required=True,type=int, help='Number of output nodes')
+    parser.add_argument('--input', '-i', required=True,type=int,  help='Number of input neurons')
+    parser.add_argument('--hidden', '-H', required=True, type=hidden_layer,  help='Number of hidden neurons per layer')
+    parser.add_argument('--output', '-o',  required=True,type=int, help='Number of output neurons')
     #parser.add_argument('integers', metavar='N', type=int, nargs='+', help='an integer for the accumulator')
     args = parser.parse_args()
+
     print(args)
+
+    result =  snns_header()
+    result += default_unit_section
+    result += unit_definition_header
+    result += unit_definition_table_rows(args.input, args.hidden, args.output)
+    result += conn_header
+
+    print("##### Start ###########") 
+    print(result)
+    print("###### END  ###########") 
 
 
 
@@ -185,12 +214,12 @@ new_unit = unit_definiton(1,"i","2, 2, 0")
 new_unit1 = unit_definiton(10,"i","2, 2, 0") 
 
 x = list_of_connection([[1,2],[3,4],[5,6]])
-print(x)
-print(test)
-print(new_unit)
-print(new_unit1)
-
-print(print_all_connection({3: [1, 2], 4: [1, 2], 5: [3, 4], 6: [3, 4]}))
+#print(x)
+#print(test)
+#print(new_unit)
+#print(new_unit1)
+#
+#print(print_all_connection({3: [1, 2], 4: [1, 2], 5: [3, 4], 6: [3, 4]}))
 
 #print(unit_definition_table_rows(2,3,5))
 
