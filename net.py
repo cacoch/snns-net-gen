@@ -1,26 +1,42 @@
 #!/usr/bin/env python
-# Generate SNNS net file
-# input No 
-# number of nodes in each hidden layer
-# number output 
+
+# Generate SNNS net file feed forward network 
+
 
 from itertools import pairwise
 import argparse
 import sys
 
+
+conn_separtor = """
+-------|------|----------------------------------------------------------------------------------------------------------------
 """
+
+conn_header = """
+connection definition section :
+
+target | site | source:weight
+"""
+
+default_unit_section = """
+unit default section :
+
+act      | bias     | st | subnet | layer | act func     | out func
+---------|----------|----|--------|-------|--------------|-------------
+ 0.00000 |  0.00000 | h  |      0 |     1 | Act_Logistic | Out_Identity 
+---------|----------|----|--------|-------|--------------|-------------
+"""
+
+unit_definition_header = """
+unit definition section :
+
 no. | typeName | unitName | act      | bias     | st | position | act func | out func | sites
 ----|----------|----------|----------|----------|----|----------|----------|----------|-------
-  1 |          |          |  0.00000 |  0.00000 | i  |  2, 2, 0 |||
-"""
-test= """
-  1 |          |          |  0.00000 |  0.00000 | i  |  2, 2, 0 |||
 """
 
-print("##########################")
 
 def snns_header(units=128, connections=1071):
-    h = """
+    header = """
 SNNS network definition file V1.4-3D
 generated at Wed Apr  2 15:29:03 2008
 
@@ -36,7 +52,7 @@ learning function : BackpropChunk
 update function   : Serial_Order
 """.format(units=units, connections=connections)
 
-    return h
+    return header
 
 def unit_definiton( no, st, position, 
                  bias=0.00000,act_func=None, out_func=None, sites=None):
@@ -138,18 +154,17 @@ def print_connection(data):
         SNNS format for one connection
     """
 
-    print(data.items())
     (k, v), = data.items()
     result =  f"{k:>6} |      |"
 
     x = v[0]
 
     layer = [f"{n:>4}: 0.00000" for n in v]
-    #print(layer)
+    
     s = ",".join(layer)
     length = 112
     s1 = [s[0+i:length+i] for i in range(0, len(s), length)]
-    #print(s1[0])
+   
 
     result +=  "\n               ".join(s1)
 
@@ -164,29 +179,7 @@ def print_all_connection(data):
 
     return result
 
-conn_separtor = """
--------|------|----------------------------------------------------------------------------------------------------------------
-"""
 
-conn_header = """
-connection definition section :
-
-target | site | source:weight
-"""
-default_unit_section = """
-unit default section :
-
-act      | bias     | st | subnet | layer | act func     | out func
----------|----------|----|--------|-------|--------------|-------------
- 0.00000 |  0.00000 | h  |      0 |     1 | Act_Logistic | Out_Identity 
----------|----------|----|--------|-------|--------------|-------------
-"""
-unit_definition_header = """
-unit definition section :
-
-no. | typeName | unitName | act      | bias     | st | position | act func | out func | sites
-----|----------|----------|----------|----------|----|----------|----------|----------|-------
-"""
 def hidden_layer(string):
     return list(map(int, string.split(',')))
 
@@ -208,13 +201,15 @@ if __name__ == "__main__":
     result += unit_definition_header
     result += unit_definition_table_rows(args.input, args.hidden, args.output)
     result += conn_header
+    result += conn_separtor
 
     layers = split_by_layers(args.input, args.hidden, args.output)     
 
-    print(f"Layers: {layers}")
+    
     list_conn = list_of_connection(layers)
-    print(list_conn)
+   
     result += print_all_connection(list_conn)
+    result += conn_separtor
 
     print("##### Start ###########") 
     print(result)
@@ -222,19 +217,6 @@ if __name__ == "__main__":
 
 
 
-#( '{}:0.000, '*len(a) ).format(*a)
-new_unit = unit_definiton(1,"i","2, 2, 0") 
-new_unit1 = unit_definiton(10,"i","2, 2, 0") 
-
-x = list_of_connection([[1,2],[3,4],[5,6]])
-#print(x)
-#print(test)
-#print(new_unit)
-#print(new_unit1)
-#
-#print(print_all_connection({3: [1, 2], 4: [1, 2], 5: [3, 4], 6: [3, 4]}))
-
-#print(unit_definition_table_rows(2,3,5))
 
 
 
