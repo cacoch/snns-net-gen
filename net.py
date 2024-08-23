@@ -6,6 +6,7 @@
 
 from itertools import pairwise
 import argparse
+import sys
 
 """
 no. | typeName | unitName | act      | bias     | st | position | act func | out func | sites
@@ -15,6 +16,8 @@ no. | typeName | unitName | act      | bias     | st | position | act func | out
 test= """
   1 |          |          |  0.00000 |  0.00000 | i  |  2, 2, 0 |||
 """
+
+print("##########################")
 
 def snns_header(units=128, connections=1071):
     h = """
@@ -54,8 +57,9 @@ def unit_definiton( no, st, position,
 def unit_definition_table_rows(input_no, hidden_no, output_no):
     
     result =""
-    st_array = ['i'] * input_no + ["h"] * hidden_no + ["o"] * output_no
-    for i in range(1, input_no + hidden_no + output_no +1):
+    hidden_total = sum(hidden_no)
+    st_array = ['i'] * input_no + ["h"] * hidden_total + ["o"] * output_no
+    for i in range(1, input_no + hidden_total + output_no +1):
         result += unit_definiton(i, st_array.pop(0),"2, 2, 0") + "\n"
 
     return result
@@ -66,30 +70,30 @@ def split_by_layers(input_no, hidden_layers, output_no):
     Parameters
     ----------
     input_no : Integer
-        number of input units
+        number of input neurons
     hidden_layers: list of Integers
-        number of units per hidden layer
+        number of neurons per hidden layer
     output_no : Integer
-        number of output units
+        number of output neurons
 
     Returns
     -------
     list of list
-        A list of each node per layer
+        A list of each neurons per layer
     """
     result = []
 
     data = [input_no] + hidden_layers + [output_no]
     start = 1
     stop = input_no
-    #print(f"DATA {data}")
+    print(f"DATA {data}")
     
 
     for el in data:
         print(f"range({start}, {stop}+1)")
         layer = [n for n in range(start, stop+1)]
         start += el
-        stop += el
+        stop += el +1
         result.append(layer)
 
 
@@ -134,6 +138,7 @@ def print_connection(data):
         SNNS format for one connection
     """
 
+    print(data.items())
     (k, v), = data.items()
     result =  f"{k:>6} |      |"
 
@@ -183,25 +188,33 @@ no. | typeName | unitName | act      | bias     | st | position | act func | out
 ----|----------|----------|----------|----------|----|----------|----------|----------|-------
 """
 def hidden_layer(string):
-    print(type(string))
+    return list(map(int, string.split(',')))
 
     return int(string) 
 
-if __name__ == "__main__":
+def parse_args(args):
     parser = argparse.ArgumentParser(description='Create SNNS net file.')
     parser.add_argument('--input', '-i', required=True,type=int,  help='Number of input neurons')
     parser.add_argument('--hidden', '-H', required=True, type=hidden_layer,  help='Number of hidden neurons per layer')
     parser.add_argument('--output', '-o',  required=True,type=int, help='Number of output neurons')
-    #parser.add_argument('integers', metavar='N', type=int, nargs='+', help='an integer for the accumulator')
-    args = parser.parse_args()
 
-    print(args)
+    return parser.parse_args(args)
 
+if __name__ == "__main__":
+
+    args = parse_args(sys.argv[1:])
     result =  snns_header()
     result += default_unit_section
     result += unit_definition_header
     result += unit_definition_table_rows(args.input, args.hidden, args.output)
     result += conn_header
+
+    layers = split_by_layers(args.input, args.hidden, args.output)     
+
+    print(f"Layers: {layers}")
+    list_conn = list_of_connection(layers)
+    print(list_conn)
+    result += print_all_connection(list_conn)
 
     print("##### Start ###########") 
     print(result)
