@@ -8,8 +8,7 @@ import argparse
 import sys
 
 
-conn_separtor = """
--------|------|----------------------------------------------------------------------------------------------------------------
+conn_separtor = """-------|------|----------------------------------------------------------------------------------------------------------------
 """
 
 conn_header = """
@@ -101,15 +100,15 @@ def split_by_layers(input_no, hidden_layers, output_no):
 
     data = [input_no] + hidden_layers + [output_no]
     start = 1
-    stop = input_no
+    stop = 0
     print(f"DATA {data}")
     
 
     for el in data:
+        stop += el
         print(f"range({start}, {stop}+1)")
         layer = [n for n in range(start, stop+1)]
         start += el
-        stop += el +1
         result.append(layer)
 
 
