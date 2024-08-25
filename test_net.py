@@ -21,11 +21,18 @@ def test_constructor():
     new_unit = unit_definiton(1,"i","2, 2, 0") 
     assert new_unit == test_u
 
-def test_split():
-    assert split_by_layers(1,[1],1) == [[1],[2],[3]]
-    assert split_by_layers(1,[1,1],1) == [[1],[2],[3],[4]]
-    #assert split_by_layers(1,[2],1) == [[1],[2,3],[4]] this one fail
-    assert split_by_layers(2,[2],2) == [[1,2],[3,4],[5,6]]
+@pytest.mark.parametrize("i,h,o,expected", 
+                         [(1,[1],1 ,   [[1],[2],[3]]),
+                          (1,[1,1],1,  [[1],[2],[3],[4]]),
+                          (1,[2],1,    [[1],[2,3],[4]]), 
+                          (1,[2],2,    [[1],[2,3],[4,5]]),
+                          (1,[2],3,    [[1],[2,3],[4,5,6]]), 
+                          (2,[2],2,    [[1,2],[3,4],[5,6]]),
+                          (3,[3],3,    [[1,2,3],[4,5,6],[7,8,9]]),
+                          ])
+
+def test_split(i,h,o, expected):
+    assert split_by_layers(i,h,o) == expected
     
 def test_print_connection():
     compare(print_connection( {82:[n for n in range(1,82)]}) , test_conn, show_whitespace=True)
