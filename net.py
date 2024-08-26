@@ -2,6 +2,7 @@
 
 # Generate SNNS net file feed forward network 
 
+# version 0.1
 
 from itertools import pairwise
 import argparse
@@ -101,12 +102,12 @@ def split_by_layers(input_no, hidden_layers, output_no):
     data = [input_no] + hidden_layers + [output_no]
     start = 1
     stop = 0
-    print(f"DATA {data}")
+    #print(f"DATA {data}")
     
 
     for el in data:
         stop += el
-        print(f"range({start}, {stop}+1)")
+        #print(f"range({start}, {stop}+1)")
         layer = [n for n in range(start, stop+1)]
         start += el
         result.append(layer)
@@ -210,9 +211,7 @@ if __name__ == "__main__":
     result += print_all_connection(list_conn)
     result += conn_separtor
 
-    print("##### Start ###########") 
     print(result)
-    print("###### END  ###########") 
 
 
 
